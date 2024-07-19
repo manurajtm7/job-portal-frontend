@@ -1,0 +1,20 @@
+import { Search } from "lucide-react";
+import React from "react";
+
+function SearchBar({ setSearchInput }) {
+  return (
+    <div className="w-full flex items-center justify-center">
+      <div className="w-1/2 bg-inherit border rounded-xl flex items-center justify-center">
+        <input
+          type="text"
+          className="w-4/5 h-14  focus:outline-none "
+          placeholder="search a person"
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <Search className="text-zinc-400  " />
+      </div>
+    </div>
+  );
+}
+
+export default SearchBar;

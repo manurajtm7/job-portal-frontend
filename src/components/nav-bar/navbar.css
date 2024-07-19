@@ -1,0 +1,11 @@
+.drop-down {
+  position: relative;
+}
+
+.drop-down-list {
+  display: none;
+}
+
+.drop-down:hover > .drop-down-list {
+  display: flex;
+}
