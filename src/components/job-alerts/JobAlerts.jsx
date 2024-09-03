@@ -4,16 +4,15 @@ import { globalContext } from "../../contexts/application-list-context/Applicati
 import LoadingAnimation from "../loading-status/loading-animation/LoadingAnimation";
 
 function JobAlerts() {
-  const { applications, fetchJobAlerts, error, loading } =
-    useContext(globalContext);
+  const { applications, fetchJobAlerts, loading } = useContext(globalContext);
 
   useEffect(() => {
     fetchJobAlerts();
   }, []);
 
   return (
-    <div className="w-full h-[90%]   grid place-items-center overflow-auto">
-      <div className=" w-[90%] h-4/5   flex gap-5 flex-col ">
+    <div className="w-full h-full   grid place-items-center overflow-auto ">
+      <div className=" w-[90%] h-4/5 mt-8 flex gap-5 flex-col overflow-auto snap-y">
         {!loading ? (
           applications?.map((data, index) => (
             <JobAlertCard key={index} {...data} />

@@ -29,6 +29,8 @@ function EmployerDetilsContext({ children }) {
       }, 6000);
     }
   };
+
+  
   return (
     <globalContext.Provider
       value={{

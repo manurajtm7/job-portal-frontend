@@ -3,9 +3,21 @@ import LoadingAnimation from "../../../components/loading-status/loading-animati
 import profileImage from "../../../assets/character-images/user.png";
 import Navbar from "../../../components/nav-bar/Navbar";
 
-import { Check, Cross, Delete } from "lucide-react";
+import {
+  Check,
+  Cross,
+  Delete,
+  DeleteIcon,
+  Edit,
+  LucideDelete,
+  Trash,
+  Trash2,
+  X,
+} from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProfileViewer from "../../../components/profile-viewer/ProfileViewer";
+import { Link } from "react-router-dom";
 
 function EmployerViewProfile() {
   const [profile, setProfile] = useState({});
@@ -13,6 +25,7 @@ function EmployerViewProfile() {
   const [inputSkill, setInputSKll] = useState("");
   const [isActiveSKillInput, setIsActiveSKillInput] = useState(false);
   const [changes, setChange] = useState(false);
+  const [imageClose, setImageClose] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -26,7 +39,6 @@ function EmployerViewProfile() {
         credentials: "include",
       });
 
-      console.log(response);
       if (response.ok) {
         const data = await response.json();
         setProfile(data.body);
@@ -41,8 +53,6 @@ function EmployerViewProfile() {
 
     () => controller.abort();
   }, [changes]);
-
-  console.log(profile);
 
   const handleAddSkills = async () => {
     setChange(true);
@@ -63,20 +73,47 @@ function EmployerViewProfile() {
     }
   };
 
-  return (
-    <div className="w-full h-screen relative flex flex-col items-center justify-center body">
-      <ToastContainer />
+  const handleDeleteSkill = async (skill) => {
+    const permission = confirm("Do you want to deleted skill ?");
+    if (!permission) return;
 
+    setChange(true);
+    const response = await fetch("http://localhost:4000/profile-view", {
+      method: "DELETE",
+      body: JSON.stringify({ skill }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      toast.success("skill deleted successfully");
+      setChange(false);
+    } else {
+      toast.error("something wrong, check connection");
+      setChange(false);
+    }
+  };
+
+  return (
+    <div className="w-full h-max relative flex flex-col items-center justify-center body">
+      <ToastContainer />
+      {imageClose && (
+        <ProfileViewer
+          imageUrl={profile?.personalDetails?.profilePicture}
+          setClose={setImageClose}
+        />
+      )}
       {!loading ? (
-        <div className="w-full h-full  flex gap-10 items-center justify-start ">
+        <div className="w-full h-full  flex gap-10 flex-col sm:flex-row items-center justify-start ">
           <Navbar />
-          <div className="w-1/4 h-full bg-blue-50  bg-opacity-50 border   rounded-lg  flex flex-col gap-4 items-center justify-center">
-            <div className="w-4/5 flex gap-10 flex-col items-center  ">
-              <div className="w-32 h-32 ">
+          <div className="w-full sm:w-1/4 min-h-[60vh] sm:h-screen bg-blue-50  bg-opacity-50 border   rounded-lg  flex flex-col gap-4 items-center justify-center">
+            <div className="w-4/5  flex sm:gap-10 flex-col items-center justify-center  ">
+              <div className="w-32 h-32 grid place-items-center overflow-hidden ">
                 <img
-                  src={profileImage}
+                  src={profile?.personalDetails?.profilePicture || profileImage}
                   alt="profile image"
-                  className="border-2 border-white rounded-full"
+                  className="w-full h-full object-cover border-2 border-white rounded-full"
+                  onClick={() => setImageClose((prev) => !prev)}
                 />
               </div>
               <div className="text-center">
@@ -88,6 +125,14 @@ function EmployerViewProfile() {
                   <p className="text-xs">
                     {new Date(profile?.createdAt).toLocaleString()}
                   </p>
+                  <p className="text-sm text-blue-800">
+                    <Link
+                      to={"/authentication/update-profile"}
+                      className="flex gap-3 items-center justify-center"
+                    >
+                      Edit profile <Edit size={17} />
+                    </Link>
+                  </p>
                 </div>
               </div>
             </div>
@@ -98,12 +143,18 @@ function EmployerViewProfile() {
               <h1 className="text-xl font-semibold p-2 border-b-2 border-zinc-300 mb-5">
                 Skills
               </h1>
-              <ul className="h-18 py-1 grid gap-3 grid-cols-3  overflow-auto ">
+              <ul className="h-18 py-1 sm:grid gap-3 sm:grid-cols-3 flex flex-wrap  overflow-auto ">
                 {profile?.Skills?.map((data, index) => (
                   <li
                     key={index}
-                    className="text-white font-semibold bg-blue-600 border   rounded-full text-center p-1 px-4   "
+                    className="min-w-max text-zinc-950 font-semibold bg-transparent border border-zinc-500   rounded-full text-center p-1 px-4   relative group"
                   >
+                    <div
+                      onClick={() => handleDeleteSkill(data)}
+                      className="w-full h-full text-white bg-red-500 bg-opacity-70   rounded-full absolute right-0 bottom-0 opacity-0 grid place-items-center group-hover:opacity-100 transition-all cursor-pointer"
+                    >
+                      <Trash2 />
+                    </div>
                     {data}
                   </li>
                 ))}
@@ -116,7 +167,11 @@ function EmployerViewProfile() {
                   className=" text-blue-600 font-thin "
                   onClick={() => setIsActiveSKillInput((prev) => !prev)}
                 >
-                  {!isActiveSKillInput ? "add skills" : <Delete />}
+                  {!isActiveSKillInput ? (
+                    "add skills"
+                  ) : (
+                    <X className="text-red-600" />
+                  )}
                 </button>
                 {isActiveSKillInput && (
                   <div className="flex gap-3 items-center justify-center">
@@ -124,8 +179,8 @@ function EmployerViewProfile() {
                       type="text"
                       placeholder="type any skill you have..."
                       onChange={(e) => setInputSKll(e.target.value)}
-                      className="text-white bg-blue-500 p-2 px-3 rounded-sm
-                      outline-blue-800 placeholder:text-white"
+                      className="text-zinc-700 bg-zinc-100 p-2 px-3 rounded-sm
+                      outline-blue-200 placeholder:text-zinc-700"
                     />
                     <Check onClick={handleAddSkills} />
                   </div>
@@ -160,7 +215,9 @@ function EmployerViewProfile() {
           </div>
         </div>
       ) : (
-        <LoadingAnimation />
+        <div className="w-full h-screen relative">
+          <LoadingAnimation />
+        </div>
       )}
     </div>
   );

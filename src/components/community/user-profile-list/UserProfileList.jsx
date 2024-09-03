@@ -1,39 +1,56 @@
-import { ArrowUpRight, MessageCircle, ShieldCheck } from "lucide-react";
-import React from "react";
+import { ArrowUpRight, BadgeCheck, MessageCircle } from "lucide-react";
+import React, { useContext } from "react";
 import profileImage from "../../../assets/character-images/user.png";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { globalContext } from "../../../contexts/employer-details-context/EmployerDetailsContext";
+import "./profile-list-style.css";
 
 function UserProfileList({
   _id,
   name,
   email,
   createdAt,
+  personalDetails,
+  isRequestAvail,
   EmployerDetails,
   setSelectedUser,
   setSelected,
+  ...restData
 }) {
   const navigate = useNavigate();
+  const { profileDetails } = useContext(globalContext);
+
   const handleSelectedUser = () => {
-    setSelectedUser(name);
-    setSelected(1);
+    if (
+      !isRequestAvail ||
+      restData?.ChatRequests.includes(profileDetails?._id)
+    ) {
+      setSelectedUser(name);
+      setSelected(1);
+    } else {
+      toast.warn("Please send a request to chat with this person");
+    }
   };
 
   return (
-    <li className="w-1/2 bg-zinc-50 rounded-lg px-8 py-3 shadow ">
-      <div className="flex items-center space-x-4">
-        <div className="flex-shrink-0">
+    <li className="w-full sm:w-1/2  bg-zinc-50 rounded-lg px-8 py-3 shadow list-none  ">
+      <div className="flex items-center space-x-4 card-animate ">
+        <div
+          className={`flex-shrink-0 shadow rounded-full relative overflow-hidden `}
+        >
           <img
             className="w-14 h-14 rounded-full"
-            src={profileImage}
+            src={personalDetails?.profilePicture || profileImage}
             alt="Neil image"
           />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-medium text-gray-900 truncate flex gap-2 ">
+          <p className="text-sm font-medium text-gray-900 truncate flex gap-2 items-center justify-start ">
             {name || "Fetching"}
             {EmployerDetails && (
               <span title="employer badge">
-                <ShieldCheck className="text-blue-900" />
+                <BadgeCheck size={18} className="text-blue-600 " />
               </span>
             )}
           </p>

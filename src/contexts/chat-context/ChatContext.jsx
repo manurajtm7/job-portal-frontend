@@ -15,7 +15,7 @@ export const socket = io.connect(SOCKET_URL, {
 function ChatProvider({ children }) {
   const [selected, setSelected] = useState(0);
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState({});
+  const [selectedUser, setSelectedUser] = useState(null);
 
   const fetchHandler = async () => {
     const response = await fetch("http://localhost:4000/users-list", {

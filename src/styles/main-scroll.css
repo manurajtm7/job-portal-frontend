@@ -1,0 +1,25 @@
+
+
+.scroll-item{
+    position: relative;
+}
+.scroll-item::after {
+    content:  "";
+    width: 100%;
+    height: 5px;
+    background-color: rgb(29, 25, 17);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    animation: push 3s 0s;
+    animation-timeline: scroll();
+}
+
+@keyframes push {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

@@ -5,6 +5,8 @@ import EmployerProfiePage from "../../components/proflle-page/employer-profile-p
 import JobAlerts from "../../components/job-alerts/JobAlerts";
 import { globalContext } from "../../contexts/employer-details-context/EmployerDetailsContext";
 import SideNavbar from "../../components/side-nav-bar/SideNavbar";
+import EmployerRequestPage from "../../components/employer-request/EmployerRequestPage";
+import { Link } from "react-router-dom";
 
 const EmployerDashboard = () => {
   const [currentSelected, setCurrentSelected] = useState(0);
@@ -15,18 +17,35 @@ const EmployerDashboard = () => {
   }, []);
 
   return (
-    <div className=" w-full h-screen bg-gray-200 flex relative">
+    <div className=" w-full h-screen bg-white flex relative">
       <Navbar />
       <SideNavbar
         currentSelected={currentSelected}
         setCurrentSelected={setCurrentSelected}
       />
-      <div className="w-4/5 h-full  border flex items-center justify-center ">
+      <div className=" w-full sm:w-4/5 h-full   flex items-center justify-center overflow-auto ">
         <div className=" w-full h-full flex items-center justify-center ">
           {currentSelected === 0 && <EmployerProfiePage />}
           {currentSelected === 1 &&
             (profileDetails?.EmployerDetails ? (
-              <JobAlerts />
+              profileDetails?.verified ? (
+                <JobAlerts />
+              ) : (
+                <div className="text-center">
+                  <h1 className="text-lg font-semibold">
+                    Please verify your profile
+                  </h1>
+                  <p className="text-sm opacity-75">
+                    you can post jobs by getting verified badge or verification
+                  </p>
+                  <Link
+                    to={"/authentication/verification-form"}
+                    className="block text-blue-600 mt-5"
+                  >
+                    click here to verify your profile
+                  </Link>
+                </div>
+              )
             ) : (
               <div>
                 <p>Employer details unavailabe</p>
@@ -37,7 +56,24 @@ const EmployerDashboard = () => {
             ))}
           {currentSelected === 2 &&
             (profileDetails?.EmployerDetails ? (
-              <JobPosting />
+              profileDetails?.verified ? (
+                <JobPosting />
+              ) : (
+                <div className="text-center">
+                  <h1 className="text-lg font-semibold">
+                    Please verify your profile
+                  </h1>
+                  <p className="text-sm opacity-75">
+                    you can post jobs by getting verified badge or verification
+                  </p>
+                  <Link
+                    to={"/authentication/verification-form"}
+                    className="block text-blue-600 mt-5"
+                  >
+                    click here to verify your profile
+                  </Link>
+                </div>
+              )
             ) : (
               <div>
                 <p>Employer details unavailabe</p>
@@ -46,6 +82,7 @@ const EmployerDashboard = () => {
                 </p>
               </div>
             ))}
+          {currentSelected === 3 && <EmployerRequestPage />}
         </div>
       </div>
     </div>

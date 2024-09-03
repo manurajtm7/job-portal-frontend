@@ -3,34 +3,43 @@ import { Link } from "react-router-dom";
 import LoadingAnimation from "../../loading-status/loading-animation/LoadingAnimation";
 import ProfileImage from "../../../assets/character-images/user.png";
 import { globalContext } from "../../../contexts/employer-details-context/EmployerDetailsContext";
+import ProfileViewer from "../../profile-viewer/ProfileViewer";
 
 function EmployerProfiePage() {
-  const {
-    profileDetails,
-    loading,
-    fetchHandle,
-  } = useContext(globalContext);
-  
+  const { profileDetails, loading, fetchHandle } = useContext(globalContext);
+  const [imageClose, setImageClose] = useState(false);
+
   useEffect(() => {
     fetchHandle();
   }, []);
 
-  
   return (
     <div className="w-full h-4/5 bg-tranparent p-5  ">
+      {imageClose && (
+        <ProfileViewer
+          imageUrl={profileDetails?.personalDetails?.profilePicture}
+          setClose={setImageClose}
+        />
+      )}
       {loading ? (
         <LoadingAnimation />
       ) : (
-        <div className="container  mx-auto p-4">
-          <h1 className="text-3xl font-bold mb-4">Profile Details</h1>
+        <div className="container  mx-auto p-0 sm:p-4">
+          <h1 className="text-xl sm:text-3xl font-bold mb-4 ">
+            Profile Details
+          </h1>
 
-          <div className="w-full grid  gap-4 grid-cols-2  ">
+          <div className="w-full grid  gap-4 grid-cols-1 sm:grid-cols-2 overflow-y-auto  ">
             <div className="w-full h-full bg-zinc-50 bg-opacity-20  p-4  border border-zinc-200 flex flex-col gap-5  rounded-lg">
               <div className=" bg-blue-500 bg-opacity-5 p-5 rounded-lg grid place-items-center  overflow-hidden">
                 <img
-                  src={ProfileImage}
+                  src={
+                    profileDetails?.personalDetails?.profilePicture ||
+                    ProfileImage
+                  }
                   alt="Profile image"
-                  className="w-24 h-24 border-4 border-zinc-200 rounded-full"
+                  className="w-24 h-24  border-zinc-200 object-cover rounded-full"
+                  onClick={() => setImageClose((prev) => !prev)}
                 />
               </div>
 
@@ -46,10 +55,18 @@ function EmployerProfiePage() {
                   {new Date(profileDetails?.createdAt).toLocaleString()}
                 </div>
               </div>
+              <div>
+                <Link
+                  to={"/authentication/update-profile"}
+                  className="text-blue-800"
+                >
+                  Edit profile
+                </Link>
+              </div>
             </div>
 
             {profileDetails.personalDetails ? (
-              <div className="w-full  bg-zinc-50 bg-opacity-20   p-5 rounded-lg">
+              <div className="w-full  bg-zinc-50 bg-opacity-20   p-5 rounded-lg shadow">
                 <h2 className="text-2xl font-semibold mb-2">
                   Personal Details
                 </h2>
@@ -78,7 +95,7 @@ function EmployerProfiePage() {
                 </div>
               </div>
             ) : (
-              <div className="w-full  bg-zinc-50 bg-opacity-20   p-5 flex gap-3 flex-col rounded-lg">
+              <div className="w-full  bg-zinc-50 bg-opacity-20   p-5 flex gap-3 flex-col rounded-lg ">
                 <span className="text-xl font-bold">
                   please add personal details
                 </span>
@@ -90,7 +107,7 @@ function EmployerProfiePage() {
               </div>
             )}
 
-            <div className="w-full  bg-zinc-50 bg-opacity-20  p-5 rounded-lg">
+            <div className="w-full  bg-zinc-50 bg-opacity-20  p-5 rounded-lg shadow">
               {profileDetails?.EmployerDetails ? (
                 <div>
                   <h2 className="text-2xl font-semibold mb-2">

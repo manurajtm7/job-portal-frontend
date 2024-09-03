@@ -2,8 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 function JobAlertCard(props) {
-
-
   const date = new Date(props?.appliedTime);
   const options = {
     year: "numeric",
@@ -18,8 +16,9 @@ function JobAlertCard(props) {
   const navigate = useNavigate();
 
   const formattedDate = date.toLocaleDateString("en-us", options);
+
   return (
-    <div className="w-[60%] h-1/3 bg-zinc-100 rounded-lg border p-5 flex shadow">
+    <div className=" w-full  sm:w-[60%] h-max sm:h-1/3 bg-white rounded-lg border-t border-l  p-5 flex gap-5 sm:gap-0 flex-col sm:flex-row shadow-xl sm:shadow-md ">
       <section className="w-full flex flex-col gap-5  ">
         <div className="flex flex-col">
           <span className="font-semibold capitalize">
@@ -33,20 +32,20 @@ function JobAlertCard(props) {
           <span className="w-full text-lg font-bold ">
             {props?.jobDetail_merge.jobTitle}
           </span>
-          <span className="w-4/5 h-8  text-sm text-ellipsis opacity-75  overflow-auto">
+          <span className="w-full sm:w-4/5 h-8  text-sm text-ellipsis opacity-75  overflow-auto">
             {props?.jobDetail_merge.jobDescription}
           </span>
         </div>
       </section>
 
-      <div className="w-4/5  grid place-items-center">
-        <section className="w-max flex gap-5 items-center justify-center ">
+      <div className="w-full sm:w-4/5  grid sm:place-items-center">
+        <section className="w-max flex flex-col sm:flex-row gap-1 sm:gap-5 items-start justify-center ">
           <strong>Time</strong>
           <span className="text-xs">{formattedDate}</span>
         </section>
 
-        <section className="w-full h-max flex flex-col items-start justify-center gap-5 ">
-          <div className="flex gap-5 items-center justify-center">
+        <section className="w-full h-max mt-3 sm:mt-0 flex flex-col items-start justify-center gap-5 ">
+          <div className="flex flex-shrink sm:flex-row gap-2 sm:gap-5 items-center justify-center">
             <span
               className={`${
                 (props?.status === "PENDING" && "border-yellow-500") ||
@@ -58,7 +57,7 @@ function JobAlertCard(props) {
             </span>
             <button
               onClick={() => navigate(`/job-alert-info/:${props?._id}`)}
-              className="text-white bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform font-semibold p-2 px-5 rounded-md"
+              className="text-white text-xs sm:text-base bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-transform font-semibold p-2 py-3 sm:py-2 sm:px-5 rounded-md"
             >
               Get all details
             </button>

@@ -3,14 +3,20 @@ import LoadingAnimation from "../../../components/loading-status/loading-animati
 import profileImage from "../../../assets/character-images/user.png";
 import Navbar from "../../../components/nav-bar/Navbar";
 
-import { BriefcaseBusiness, Check, Cross, Delete, MapPin } from "lucide-react";
+import { BriefcaseBusiness, MapPin, Send } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useLocation } from "react-router-dom";
+import ProfileViewer from "../../../components/profile-viewer/ProfileViewer";
 
 function EmployerViewProfile() {
   const [profile, setProfile] = useState({});
   const [loading, setLoading] = useState(false);
   const [changes, setChange] = useState(false);
+  const [imageClose, setImageClose] = useState(false);
+  const location = useLocation();
+
+  const jobSeekerId = location.pathname.split(":")[1];
 
   useEffect(() => {
     const controller = new AbortController();
@@ -18,9 +24,11 @@ function EmployerViewProfile() {
 
     const fetchHandler = async () => {
       setLoading(true);
-      const response = await fetch("http://localhost:4000/profile-view", {
-        method: "GET",
+      const response = await fetch("http://localhost:4000/user-profile-view", {
+        method: "POST",
         signal: signal,
+        body: JSON.stringify({ _id: jobSeekerId }),
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
       });
 
@@ -40,22 +48,42 @@ function EmployerViewProfile() {
     () => controller.abort();
   }, [changes]);
 
-  console.log(profile.EmployerDetails);
+  const handleSendRequest = async () => {
+    const response = await fetch("http://localhost:4000/chat-request", {
+      method: "POST",
+      body: JSON.stringify({ personId: jobSeekerId }),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (response.ok) {
+      toast.success("request send successfully");
+    } else
+      toast.error(
+        "Your request is already send / somthing wrong with request send"
+      );
+  };
 
   return (
-    <div className="w-full h-screen relative flex flex-col items-center justify-center body">
+    <div className="w-full min-h-screen relative flex flex-col items-center justify-center body">
       <ToastContainer />
-
+      {imageClose && (
+        <ProfileViewer
+          imageUrl={profile?.personalDetails?.profilePicture}
+          setClose={setImageClose}
+        />
+      )}
       {!loading ? (
-        <div className="w-full h-full  flex gap-10 items-center justify-start ">
+        <div className="w-screen h-screen  flex flex-col sm:flex-row  gap-10 items-center justify-start ">
           <Navbar />
-          <div className="w-1/4 h-full bg-blue-50  bg-opacity-50 border   rounded-lg  flex flex-col gap-4 items-center justify-center">
+          <div className="w-screen sm:w-1/4 min-h-screen bg-blue-50  bg-opacity-50 border   rounded-lg  flex flex-col gap-4 items-center justify-center">
             <div className="w-4/5 flex gap-10 flex-col items-center  ">
-              <div className="w-32 h-32 ">
+              <div className="w-32 h-32 grid place-items-center overflow-hidden">
                 <img
-                  src={profileImage}
+                  src={profile?.personalDetails?.profilePicture || profileImage}
                   alt="profile image"
-                  className="border-2 border-white rounded-full"
+                  className=" w-full h-full border-2 border-white rounded-full object-cover"
+                  onClick={() => setImageClose((prev) => !prev)}
                 />
               </div>
               <div className="text-center">
@@ -68,40 +96,55 @@ function EmployerViewProfile() {
                     {new Date(profile?.createdAt).toLocaleString()}
                   </p>
                 </div>
-                <div className="mt-5">
-                  <h1 className="text-lg font-semibold mb-5">
-                    Company details
-                  </h1>
-                  <p className="text-white text-sm font-medium  bg-zinc-800  mb-1 p-2 px-3 rounded-md text-ellipsis ">
-                    {profile?.EmployerDetails?.companyName}
-                  </p>
-                  <p className="text-white text-sm font-medium  bg-zinc-800  mb-1 p-2 px-3 rounded-md flex gap-2 items-center justify-center ">
-                    <BriefcaseBusiness size={16} />
-                    {profile?.EmployerDetails?.designation}
-                  </p>
-                  <p className="text-white text-sm font-medium  bg-zinc-800  mb-1 p-2 px-3 rounded-md flex gap-2 items-center justify-center ">
-                    <MapPin size={16} /> {profile?.EmployerDetails?.location}
-                  </p>
-                </div>
+                {profile?.EmployerDetails && (
+                  <div className="mt-5">
+                    <h1 className="text-lg font-semibold mb-5">
+                      Company details
+                    </h1>
+                    <p className="text-white text-sm font-medium  bg-zinc-800  mb-1 p-2 px-3 rounded-md text-ellipsis ">
+                      {profile?.EmployerDetails?.companyName}
+                    </p>
+                    <p className="text-white text-sm font-medium  bg-zinc-800  mb-1 p-2 px-3 rounded-md flex gap-2 items-center justify-center ">
+                      <BriefcaseBusiness size={16} />
+                      {profile?.EmployerDetails?.designation}
+                    </p>
+                    <p className="text-white text-sm font-medium  bg-zinc-800  mb-1 p-2 px-3 rounded-md flex gap-2 items-center justify-center ">
+                      <MapPin size={16} /> {profile?.EmployerDetails?.location}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="w-full h-[85%] p-5 grid place-items-start overflow-auto">
+          <div className="w-max h-max  sm:h-[85%] p-5 flex flex-col ">
             <div>
               <h1 className="text-xl font-semibold p-2 border-b-2 border-zinc-300 mb-5">
                 Skills
               </h1>
-              <ul className="h-18 py-1 grid gap-3 grid-cols-3  overflow-auto ">
+              <ul className=" py-1 grid gap-3 grid-cols-3  overflow-auto ">
                 {profile?.Skills?.map((data, index) => (
                   <li
                     key={index}
-                    className="text-white font-semibold bg-blue-600 border   rounded-full text-center p-1 px-4   "
+                    className="min-w-max text-zinc-700 font-semibold  border border-zinc-500  rounded-full text-center p-1 px-4   "
                   >
                     {data}
                   </li>
                 ))}
               </ul>
+            </div>
+            <div>
+              {profile?.isRequestAvail && (
+                <div title="send chat request ">
+                  <button
+                    onClick={handleSendRequest}
+                    className="text-black  p-1 px-3 border-2 rounded-md flex gap-3 items-center justify-center hover:bg-zinc-400"
+                  >
+                    Send a request
+                    <Send size={16} />
+                  </button>
+                </div>
+              )}
             </div>
             <div className="w-full flex gap-4 flex-col py-5  ">
               <h2 className="text-xl font-semibold text-gray-700">

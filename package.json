@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "framer-motion": "^11.3.24",
     "js-cookie": "^3.0.5",
     "lucide-react": "^0.400.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-intersection-observer": "^9.13.0",
     "react-router-dom": "^6.24.0",
     "react-toastify": "^10.0.5",
     "socket.io-client": "^4.7.5"

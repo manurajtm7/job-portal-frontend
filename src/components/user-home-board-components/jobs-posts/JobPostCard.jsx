@@ -9,14 +9,14 @@ function JobPostCard({ jobTitle, jobDescription, location, _id }) {
   };
   return (
     <div className="relative flex  flex-col jus items-center justify-center overflow-hidden  p-4">
-      <div className="bg-white  shadow-xl shadow-gray-100 w-4/5 max-w-4xl flex flex-col sm:flex-row gap-3 sm:items-center  justify-between px-5 py-4 rounded-md">
-        <div className="w-[70%] flex gap-3 flex-col ">
-          <span className="text-blue-800 font-semibold">{jobTitle}</span>
-          <h3 className=" w-[70%] h-14 font-normal text-xs mt-px py-2   overflow-y-auto ">
+      <div className="bg-white  shadow-xl shadow-gray-100 w-full sm:w-4/5 max-w-4xl border flex flex-col sm:flex-row gap-3 sm:items-center  justify-between px-5 py-4 rounded-md">
+        <div className="w-[80%] flex gap-3 flex-col ">
+          <span className="text-zinc-800 font-semibold">{jobTitle}</span>
+          <h3 className="w-full sm:w-[90%] max-h-14 font-normal text-xs text-ellipsis  py-2  overflow-hidden  ">
             {jobDescription}
           </h3>
           <div className="flex items-center gap-3 mt-2">
-            <span className="bg-blue-100 text-blue-700 rounded-full px-3 py-1 text-sm">
+            <span className="bg-transparent text-zinc-700 border border-zinc-500 rounded-full px-3 py-1 text-sm">
               Full-time
             </span>
             <span className="text-slate-600 text-sm flex gap-1 items-center">
@@ -43,12 +43,12 @@ function JobPostCard({ jobTitle, jobDescription, location, _id }) {
             </span>
           </div>
         </div>
-        <div>
+        <div className="w-full sm:w-max flex justify-end ">
           <button
             onClick={hanldeApplySubmit}
-            className="w-full max-h-10 bg-blue-500 text-white text-sm font-medium px-4 py-2 rounded-md flex gap-1 items-center"
+            className="w-max max-h-10  text-zinc-800 text-sm font-medium px-4 py-2  rounded-md flex gap-1 items-center"
           >
-            Apply Now
+            View details
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-4 w-4"

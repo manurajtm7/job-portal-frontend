@@ -10,11 +10,10 @@ function JobsLists() {
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log(jobsList, "<---job");
-
   useEffect(() => {
     const fetchJobsList = async () => {
       setLoading(true);
+
       const response = await fetch("http://localhost:4000/jobs-list", {
         method: "GET",
         credentials: "include",
@@ -31,26 +30,30 @@ function JobsLists() {
   return (
     <div className="w-full h-screen  flex gap-10 flex-col items-center justify-center ">
       <Navbar />
-      <div className=" w-full h-[80%] mt-5  flex flex-col items-center ">
-        <SearchBar setSearchInput={setSearchInput} />
+      <div className=" w-full h-[80%] mt-8  flex flex-col items-center ">
+        <div className="w-[90%] sm:w-4/5 ">
+          <SearchBar text={"search jobs"} setSearchInput={setSearchInput} />
+        </div>
 
         {!loading ? (
-          <div className="w-[55%] max-h-full   mt-10 rounded-lg overflow-auto">
+          <div className=" w-full sm:w-[50%] max-h-full  mt-3 sm:mt-10 rounded-lg overflow-auto">
             {jobsList
               .filter((item) =>
                 item.jobTitle
                   .toLowerCase()
                   .includes(searchInput.toLocaleLowerCase())
               )
-              .map((data, index) => (
-                <JobPostCard
-                  key={index}
-                  jobTitle={data.jobTitle}
-                  jobDescription={data.jobDescription}
-                  location={data.location}
-                  _id={data._id}
-                />
-              ))}
+              .map((data, index) => {
+                return (
+                  <JobPostCard
+                    key={index}
+                    jobTitle={data.jobTitle}
+                    jobDescription={data.jobDescription}
+                    location={data.location}
+                    _id={data._id}
+                  />
+                );
+              })}
           </div>
         ) : (
           <LoadingAnimation />

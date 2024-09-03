@@ -8,6 +8,8 @@ import {
   ProfileForm,
   CompanyForm,
   JobForm,
+  VerificationForm,
+  UpdateProfileDetails,
 } from "./components/form-components-1";
 import { ApplicationContext } from "./contexts/application-list-context/ApplicationListContext";
 import { EmployerDetilsContext } from "./contexts/employer-details-context/EmployerDetailsContext";
@@ -22,53 +24,74 @@ import LandingPage from "./screens/landing-page/LandingPage";
 import Community from "./screens/community/Community";
 import UserProfileView from "./screens/Profile/profile-view/UserProfileView";
 import { ChatProvider } from "./contexts/chat-context/ChatContext";
+import AlertScreen from "./screens/alerts-screen/AlertScreen";
+import { AlertProvider } from "./contexts/alerts-context/AlertContext";
 
 function App() {
   return (
-    <main className="w-full h-screen text-zinc-900 bg-white">
+    <main className="w-full h-screen text-zinc-900  bg-white">
       <JobListContext>
         <ApplicationContext>
           <EmployerDetilsContext>
             <ChatProvider>
-              <Routes>
-                <Route path="/" element={<LandingPage />} />
-                <Route path="/job-portal" element={<Home />} />
-                <Route path="/jobs-list" element={<JobsLists />} />
-                <Route path="/authentication" element={<Register />} />
-                <Route path="/authentication/user-login" element={<Login />} />
-                <Route
-                  path="/employer-dashboard"
-                  element={<EmployerDashboard />}
-                />
-                <Route path="/authentication/job-form" element={<JobForm />} />
-                <Route
-                  path="/authentication/user-registration"
-                  element={<Forms />}
-                />
+              <AlertProvider>
+                <Routes>
+                  <Route path="/" element={<LandingPage />} />
+                  <Route path="/job-portal" element={<Home />} />
+                  <Route path="/jobs-list" element={<JobsLists />} />
+                  <Route path="/authentication" element={<Register />} />
+                  <Route
+                    path="/authentication/user-login"
+                    element={<Login />}
+                  />
+                  <Route
+                    path="/employer-dashboard"
+                    element={<EmployerDashboard />}
+                  />
+                  <Route
+                    path="/authentication/job-form"
+                    element={<JobForm />}
+                  />
+                  <Route
+                    path="/authentication/user-registration"
+                    element={<Forms />}
+                  />
+                  <Route
+                    path="/authentication/verification-form"
+                    element={<VerificationForm />}
+                  />
+                  <Route path="/:id" element={<JobAllData />} />
 
-                <Route path="/:id" element={<JobAllData />} />
+                  <Route
+                    path="/authentication/user-profile"
+                    element={<ProfileForm />}
+                  />
+                  <Route
+                    path="/authentication/update-profile"
+                    element={<UpdateProfileDetails />}
+                  />
+                  <Route
+                    path="/authentication/company-form"
+                    element={<CompanyForm />}
+                  />
+                  <Route
+                    path="/job-alert-info/:id"
+                    element={<JobAlertAlllInfo />}
+                  />
+                  <Route
+                    path="/employe-view-profile/:id"
+                    element={<EmployerViewProfile />}
+                  />
+                  <Route
+                    path="/view-profile/:id"
+                    element={<UserProfileView />}
+                  />
+                  <Route path="/profile" element={<ProfileView />} />
 
-                <Route
-                  path="/authentication/user-profile"
-                  element={<ProfileForm />}
-                />
-                <Route
-                  path="/authentication/company-form"
-                  element={<CompanyForm />}
-                />
-                <Route
-                  path="/job-alert-info/:id"
-                  element={<JobAlertAlllInfo />}
-                />
-                <Route
-                  path="/employe-view-profile/:id"
-                  element={<EmployerViewProfile />}
-                />
-                <Route path="/view-profile/:id" element={<UserProfileView />} />
-                <Route path="/profile" element={<ProfileView />} />
-
-                <Route path="/community" element={<Community />} />
-              </Routes>
+                  <Route path="/community" element={<Community />} />
+                  <Route path="/alerts" element={<AlertScreen />} />
+                </Routes>
+              </AlertProvider>
             </ChatProvider>
           </EmployerDetilsContext>
         </ApplicationContext>

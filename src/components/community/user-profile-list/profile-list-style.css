@@ -1,0 +1,15 @@
+.card-animate {
+  /* animation: name duration timing-function delay iteration-count direction fill-mode; */
+  animation: push 0.2s 0s;
+}
+
+@keyframes push {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}

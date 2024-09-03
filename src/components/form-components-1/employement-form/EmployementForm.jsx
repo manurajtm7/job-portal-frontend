@@ -30,6 +30,7 @@ const CompanyForm = () => {
 
     if (response.ok) {
       const employeeDetails = await response.json();
+      
       alert("successfully added employee details");
       navigate("/");
     } else {
@@ -39,7 +40,7 @@ const CompanyForm = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-[90%] max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-center">Company Details</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>

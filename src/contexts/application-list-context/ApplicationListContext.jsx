@@ -24,7 +24,6 @@ function ApplicationContext({ children }) {
       setError(true);
     }
   };
-  console.log("from context", applications);
 
   return (
     <globalContext.Provider
