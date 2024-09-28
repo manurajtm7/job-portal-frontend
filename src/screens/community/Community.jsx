@@ -33,11 +33,13 @@ function Community() {
 
   useEffect(() => {
     socket.emit("join_chat", {
-      sender: profileDetails.name,
-      receiver: selectedUser,
-      room: [profileDetails.name, selectedUser].sort().join("_"),
+      sender: profileDetails?._id,
+      receiver: selectedUser?._id,
+      room: [profileDetails?.name, selectedUser?.name].sort().join("_"),
     });
-  }, [selected, socket]);
+
+
+  }, [selected, socket, selectedUser]);
 
   useEffect(() => {
     let timeOut;
@@ -60,12 +62,38 @@ function Community() {
   }, [searchInput, users]);
 
   return (
-    <div className="w-full h-screen flex items-end sm:items-center  justify-center">
-      <Navbar />
-      <div className="w-[95%] sm:w-4/5  h-[85%] sm:h-4/5    mt-10 sm:mt-16  flex gap-2 flex-col items-center justify-center relative ">
-        <SelectionBar selected={selected} setSelected={setSelected} />
-        {!selected ? (
-          <div className="w-full  sm:w-[75%] h-[90%] p-3  flex gap-4 flex-col items-center   rounded-lg overflow-x-hidden overflow-y-auto">
+    <div className="w-full h-screen   flex flex-col items-center sm:items-center  justify-center">
+      <div className="w-full h-32 ">
+        <Navbar />
+      </div>
+      <div className="w-full md:w-full  h-[90%] md:h-[85%]     flex gap-2 flex-col items-center justify-center relative ">
+        <div className="md:hidden w-[95%] h-full  flex flex-col items-center justify-center">
+          <SelectionBar selected={selected} setSelected={setSelected} />
+          {!selected ? (
+            <div className="w-full  sm:w-[75%] h-[90%]   flex gap-4 flex-col items-center   rounded-lg overflow-x-hidden overflow-y-auto">
+              <SearchBar setSearchInput={setSearchInput} />
+              {list.length > 0 ? (
+                list.map((data, index) => (
+                  <UserProfileList
+                    {...data}
+                    key={index}
+                    setSelectedUser={setSelectedUser}
+                    setSelected={setSelected}
+                  />
+                ))
+              ) : (
+                <span className="text-sm opacity-65">No users found...</span>
+              )}
+            </div>
+          ) : (
+            <div className="w-full  sm:w-[75%]  h-full sm:h-[90%]    flex gap-4 flex-col items-end justify-center  rounded-lg  overflow-y-auto">
+              <ChatPage selectedUser={selectedUser} user={user} />
+            </div>
+          )}
+        </div>
+
+        <div className=" w-full h-full hidden   md:flex items-center justify-center">
+          <div className="w-full  md:w-max h-[90%] md:h-full  p-3  flex gap-4 flex-col items-center   rounded-lg overflow-x-hidden overflow-y-auto">
             <SearchBar setSearchInput={setSearchInput} />
             {list.length > 0 ? (
               list.map((data, index) => (
@@ -80,11 +108,10 @@ function Community() {
               <span className="text-sm opacity-65">No users found...</span>
             )}
           </div>
-        ) : (
-          <div className="w-full  sm:w-[75%]  h-full sm:h-[90%]  p-3  flex gap-4 flex-col items-end justify-center  rounded-lg  overflow-y-auto">
+          <div className="w-full  sm:w-[75%]  h-full     p-3 flex   items-center justify-center    overflow-y-auto">
             <ChatPage selectedUser={selectedUser} user={user} />
           </div>
-        )}
+        </div>
       </div>
       <ToastContainer />
     </div>

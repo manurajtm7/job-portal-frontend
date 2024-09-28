@@ -2,7 +2,7 @@ import React from "react";
 
 function SelectionBar({ selected, setSelected }) {
   return (
-    <section className="w-max  sm:w-[38%] h-max text-black   p-4  flex gap-8   items-center justify-center   shadow-md rounded-xl ">
+    <section className="w-full h-max text-black   p-4  flex gap-8   items-center justify-center   shadow-md rounded-xl ">
       <h1 className="text-center  font-semibold ">Community</h1>
       <ul className="flex gap-5  items-center justify-center cursor-pointer ">
         <li

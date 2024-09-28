@@ -31,7 +31,7 @@ function JobsLists() {
     <div className="w-full h-screen  flex gap-10 flex-col items-center justify-center ">
       <Navbar />
       <div className=" w-full h-[80%] mt-8  flex flex-col items-center ">
-        <div className="w-[90%] sm:w-4/5 ">
+        <div className="w-[90%] md:w-[40%] ">
           <SearchBar text={"search jobs"} setSearchInput={setSearchInput} />
         </div>
 

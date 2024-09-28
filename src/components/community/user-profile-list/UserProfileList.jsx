@@ -26,7 +26,11 @@ function UserProfileList({
       !isRequestAvail ||
       restData?.ChatRequests.includes(profileDetails?._id)
     ) {
-      setSelectedUser(name);
+      setSelectedUser({
+        _id,
+        name,
+        email,
+      });
       setSelected(1);
     } else {
       toast.warn("Please send a request to chat with this person");
@@ -34,8 +38,8 @@ function UserProfileList({
   };
 
   return (
-    <li className="w-full sm:w-1/2  bg-zinc-50 rounded-lg px-8 py-3 shadow list-none  ">
-      <div className="flex items-center space-x-4 card-animate ">
+    <li className="w-full md:w-full  bg-zinc-50 rounded-lg px-8 py-3 shadow list-none  ">
+      <div className="flex items-center space-x-4  ">
         <div
           className={`flex-shrink-0 shadow rounded-full relative overflow-hidden `}
         >

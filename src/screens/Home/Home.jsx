@@ -157,7 +157,9 @@ function Home() {
             </div>
 
             <div className="w-full h-max mt-8 hidden sm:flex flex-col sm:flex-row items-start sm:items-center justify-center relative">
-              <SearchBar text={"search job..."} setSearchInput={() => {}} />
+              <div className="w-1/2">
+                <SearchBar text={"search job..."} setSearchInput={() => { }} />
+              </div>
               <Link
                 to={token ? "/jobs-list" : "#sign-up"}
                 className="w-max h-12 text-white font-semibold bg-blue-600 rounded-lg px-7 text-sm grid place-items-center sm:absolute right-24"
